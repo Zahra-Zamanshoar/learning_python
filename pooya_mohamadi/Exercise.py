@@ -1,11 +1,14 @@
-lst = ['11','10','10.5']
-# lst_1 = []
-for i in lst:
-    try:
-        i = int(i)
-        print(i)
-    except:
-        pass
+valid_characters = "0123456789"
+lst = ["11", '122p17398479823749827349827','101565pooya5132146', "pooya", '10.5','17']
+lst_2 = []
+for lst_item in lst:
+    for item_character in lst_item:
+        if item_character not in valid_characters:
+            lst_2.append(lst_item)
+            break
+for lst_item in lst:
+    if lst_item not in lst_2:
+        print(int(lst_item))
 
 s = [386, 462, 47, 418, 907, 344, 236, 375, 823,
      566, 597, 978, 328, 615, 953, 345, 399, 162, 758,
