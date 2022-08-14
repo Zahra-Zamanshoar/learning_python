@@ -13,10 +13,7 @@ int_to_str = str(10)
 set_to_tuple = tuple({10,20,20,30})
 
 
-#tuple_to_set = set((10,20,10))
+tuple_to_set = set((10,20,10))
 
 
-#list_to_set = set((10,20,10))
-zahra = [1,2,3,4]
-z = set(zahra)
-print(z)
+list_to_set = set((10,20,10))
