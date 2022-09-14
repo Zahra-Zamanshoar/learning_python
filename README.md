@@ -1,7 +1,4 @@
-# First_project
-
-![download](https://user-images.githubusercontent.com/103884658/185146949-eb443e05-a85f-46a9-82b5-2c0d01d327d4.png)
-
-![you_can_see_exam:](https://www.online-python.com/)
-
-This is just the first , be patient!:))
+# today_I_learn
+For being successful you don't need to be very strong you just need to be stronger than one thing "One of your strongest excuses". So in this reapository I try to be stronger
+ 
+ ![image](https://user-images.githubusercontent.com/103884658/188314791-685d2251-6824-409f-baa8-51cfb0cc0501.png)
