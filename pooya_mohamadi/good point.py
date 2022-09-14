@@ -60,3 +60,41 @@ print(capitals)
 capitals.keys()
 # how to access both
 capitals.items()
+a = [1, 2]
+b = [1, 2]
+print(a == b, a is b )
+if 0:
+    print('impossible:(')
+else:
+    print('zero means False')
+if -0.00000000000001:
+    print('wow')
+if None:
+    print('impossible :(')
+else:
+    print('None means False')
+empty_lst = []
+if empty_lst:
+    print('impossible :(')
+else:
+    print('empty means False')
+range(10)
+str_to_int = int('20')
+
+
+float_to_int = int(10.36)
+
+
+int_to_float = float(10)
+
+
+int_to_str = str(10)
+
+
+set_to_tuple = tuple({10,20,20,30})
+
+
+tuple_to_set = set((10,20,10))
+
+
+list_to_set = set((10,20,10))
