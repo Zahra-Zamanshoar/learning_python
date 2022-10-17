@@ -1,0 +1,111 @@
+version: "3.7"
+
+services:
+  proxy:
+    build: proxy
+    restart: always
+    ports:
+      - "8010:80"
+    volumes:
+      - ./proxy:/etc/nginx/conf.d
+
+  address_parser:
+    build: ../address-parser-service/app
+    restart: always
+    expose:
+      - 660
+    environment:
+      - END_POINT=/parse
+      - FEEDBACK_ENDPOINT=/feedback
+      - FEEDBACK_PATH=/app/feedback_data
+      - MODEL_PATH=/app/weights/best
+    volumes:
+      - ../address-parser-service/app:/app
+    deploy:
+      replicas: 2
+    command: uvicorn entry_point:app --port 660 --host 0.0.0.0
+
+  geocoding:
+    build: ../geocoding-api/app
+    restart: always
+    expose:
+      - 660
+    environment:
+      - END_POINT=/geocode
+      - ADDRESS_PARSER_URL=http://proxy:80/address_parser/parse
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    volumes:
+      - ../geocoding-api/app:/app
+    deploy:
+      replicas: 2
+    command: uvicorn entry_point:app --host 0.0.0.0 --port 660
+
+  region_identifier:
+    build: ../region_identifier/app
+    restart: always
+    expose:
+      - 660
+    environment:
+      - END_POINT=/geocoding/identify_region
+      - GEOCODE_IP=http://proxy:80/geocoding/geocode
+    volumes:
+      - ../region_identifier/app:/app
+    command: uvicorn entry_point:app --host 0.0.0.0 --port 660
+
+
+
+  # Audio
+  audio_diarization:
+    build: ../audio_diarization/app
+    restart: always
+    expose:
+      - 660
+    environment:
+      - DIARIZATION_END_POINT=/speech/diarize
+    volumes:
+      - ../audio_diarization/app:/app
+    deploy:
+      replicas: 2
+    command: uvicorn entry_point:app --host 0.0.0.0 --port 660
+
+  # Databases
+  elasticsearch:
+    image: elasticsearch:8.1.2
+    container_name: elasticsearch
+    restart: always
+    hostname: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - vm_max_map_count=262144
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - elasticsearch-data-volume:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  kibana:
+    container_name: kibana
+    restart: always
+    image: kibana:8.1.2
+    hostname: kibana
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+volumes:
+  elasticsearch-data-volume:
+    driver: local
