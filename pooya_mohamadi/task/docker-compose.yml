@@ -8,7 +8,7 @@ services:
       - "8010:80"
     volumes:
       - ./proxy:/etc/nginx/conf.d
-
+    
   address_parser:
     build: ../address-parser-service/app
     restart: always
